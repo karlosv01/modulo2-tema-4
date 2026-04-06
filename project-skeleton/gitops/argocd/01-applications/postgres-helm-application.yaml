@@ -15,7 +15,9 @@ spec:
       releaseName: training-postgresql
       values: |
         image:
-          tag: 15
+          registry: docker.io
+          repository: bitnami/postgresql
+          tag: "16" 
         auth:
           username: training
           password: trainingpwd
