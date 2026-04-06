@@ -1,0 +1,182 @@
+version: "3.7"
+
+# Template de trabajo para la práctica.
+# Objetivo: completar progresivamente un entorno DEV con:
+# - Base de datos PostgreSQL
+# - Job de inicialización DDL
+# - Backend Java sin persistencia
+# - Backend Python con persistencia en PostgreSQL
+# - Web UI
+# - Docker Registry privado
+# - SonarQube + su base de datos
+# - Artifactory como repositorio de artefactos
+#
+# Recomendación didáctica:
+# 1. Completa primero db + ddl_job
+# 2. Rellena el bloque backend-java
+# 3. Rellena el bloque backend-python
+# 4. Rellena el bloque webui
+# 5. Activa registry
+# 6. Activa sonardb + sonarqube
+# 7. Activa artifactory
+#
+# Importante:
+# - Este archivo no debe contener la solución final cerrada.
+# - Los bloques de aplicación y herramientas se dejan como plantilla.
+# - La idea es que el alumno los complete con ayuda del README.
+
+networks:
+  training_net:
+    driver: bridge
+
+volumes:
+  db_data:
+  registry_data:
+  sonarqube_data:
+  sonardb_data:
+  artifactory_data:
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: training
+      POSTGRES_PASSWORD: trainingpwd
+      POSTGRES_DB: trainingdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - training_net
+
+  ddl_job:
+    image: postgres:16-alpine
+    depends_on:
+      - db
+    environment:
+      PGPASSWORD: trainingpwd
+    volumes:
+      - ./ddl:/ddl:ro
+    networks:
+      - training_net
+    command: >
+      sh -c "until pg_isready -h db -U training -d trainingdb; do sleep 2; done;
+             psql -h db -U training -d trainingdb -f /ddl/init.sql"
+
+  # TODO ejercicio 3:
+  # Crear el servicio backend-java a partir de estas pistas.
+  #
+  # backend-java:
+  #   build:
+  #     context: <ruta al codigo fuente Java>
+  #     dockerfile: <ruta al Dockerfile Java>
+  #     args:
+  #       VERSION: "<version de ejemplo>"
+  #   image: <nombre-imagen-java>
+  #   ports:
+  #     - "<puerto host>:<puerto contenedor>"
+  #   networks:
+  #     - training_net
+
+  # TODO ejercicio 4:
+  # Crear el servicio backend-python a partir de estas pistas.
+  #
+  # backend-python:
+  #   build:
+  #     context: <ruta al codigo fuente Python>
+  #     dockerfile: <ruta al Dockerfile Python>
+  #   image: <nombre-imagen-python>
+  #   depends_on:
+  #     - db
+  #     - ddl_job
+  #   environment:
+  #     DB_HOST: <nombre del servicio de base de datos>
+  #     DB_PORT: "<puerto interno de postgres>"
+  #     DB_NAME: <nombre de la base de datos>
+  #     DB_USER: <usuario de la base de datos>
+  #     DB_PASSWORD: <password de la base de datos>
+  #   ports:
+  #     - "<puerto host>:<puerto contenedor>"
+  #   networks:
+  #     - training_net
+
+  # TODO ejercicio 5:
+  # Crear el servicio webui a partir de estas pistas.
+  #
+  # webui:
+  #   build:
+  #     context: <ruta al codigo fuente web>
+  #     dockerfile: <Dockerfile del frontend>
+  #   image: <nombre-imagen-webui>
+  #   depends_on:
+  #     - backend-java
+  #     - backend-python
+  #   ports:
+  #     - "<puerto host>:<puerto contenedor>"
+  #   networks:
+  #     - training_net
+
+  # TODO ejercicio opcional:
+  # - Descomentar este servicio
+  # - Levantar un registry privado para publicar imagenes del laboratorio
+  # - Validar acceso desde el host y desde otros contenedores
+  #
+  # registry:
+  #   image: registry:2
+  #   ports:
+  #     - "5000:5000"
+  #   environment:
+  #     REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+  #   volumes:
+  #     - registry_data:/data
+  #   networks:
+  #     training_net:
+  #       aliases:
+  #         - local-registry
+
+  # TODO ejercicio opcional:
+  # - Descomentar primero sonardb
+  # - Descomentar despues sonarqube
+  # - Revisar variables JDBC y persistencia
+  # - Validar acceso a la consola web
+  #
+  # sonardb:
+  #   image: postgres:12
+  #   environment:
+  #     POSTGRES_USER: sonar
+  #     POSTGRES_PASSWORD: sonar
+  #     POSTGRES_DB: sonar
+  #   volumes:
+  #     - sonardb_data:/var/lib/postgresql/data
+  #   networks:
+  #     - training_net
+  #
+  # sonarqube:
+  #   image: sonarqube:9.9.0-community
+  #   depends_on:
+  #     - sonardb
+  #   environment:
+  #     SONAR_JDBC_URL: jdbc:postgresql://sonardb:5432/sonar
+  #     SONAR_JDBC_USERNAME: sonar
+  #     SONAR_JDBC_PASSWORD: sonar
+  #   volumes:
+  #     - sonarqube_data:/opt/sonarqube
+  #   ports:
+  #     - "9009:9000"
+  #   networks:
+  #     - training_net
+
+  # TODO ejercicio opcional:
+  # - Descomentar este servicio
+  # - Entender por que un equipo necesita un repositorio de artefactos
+  # - Revisar persistencia y puerto publicado
+  #
+  # artifactory:
+  #   image: releases-docker.jfrog.io/jfrog/artifactory-oss:latest
+  #   ports:
+  #     - "8081:8081"
+  #   volumes:
+  #     - artifactory_data:/var/opt/jfrog/artifactory
+  #   networks:
+  #     - training_net

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webui
+  namespace: apps
+spec:
+  selector:
+    app: webui
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  type: ClusterIP

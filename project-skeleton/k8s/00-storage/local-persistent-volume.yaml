@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  # Ejercicio 1:
+  # Este PV local sigue el mismo enfoque del repo de referencia:
+  # almacenamiento local, simple y suficiente para laboratorio.
+  name: postgres-local-pv
+  labels:
+    type: local
+spec:
+  storageClassName: local-path
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    # El path existe dentro del nodo k3d.
+    # Para que persista fuera del contenedor del nodo, k3d montara el host sobre /tmp.
+    path: "/tmp/postgres-volume"

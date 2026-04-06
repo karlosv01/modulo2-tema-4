@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-python
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.backendPython.replicaCount }}
+  selector:
+    matchLabels:
+      app: backend-python
+  template:
+    metadata:
+      labels:
+        app: backend-python
+    spec:
+      containers:
+        - name: backend-python
+          image: {{ .Values.backendPython.image }}
+          ports:
+            - containerPort: {{ .Values.backendPython.containerPort }}
+          env:
+            - name: DB_HOST
+              value: {{ .Values.backendPython.env.DB_HOST | quote }}
+            - name: DB_PORT
+              value: {{ .Values.backendPython.env.DB_PORT | quote }}
+            - name: DB_NAME
+              value: {{ .Values.backendPython.env.DB_NAME | quote }}
+            - name: DB_USER
+              value: {{ .Values.backendPython.env.DB_USER | quote }}
+            - name: DB_PASSWORD
+              value: {{ .Values.backendPython.env.DB_PASSWORD | quote }}

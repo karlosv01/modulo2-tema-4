@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  # Ejercicio 3:
+  # Proyecto base para agrupar las aplicaciones de la practica.
+  name: training-project
+  namespace: argocd
+spec:
+  description: Proyecto GitOps del stack de formacion
+  sourceRepos:
+    # TODO ejercicio 3:
+    # Sustituir por la URL del repositorio Git que actua como fuente de verdad.
+    - https://github.com/karlosv01/modulo2-tema-4.git
+  destinations:
+    - namespace: database
+      server: https://kubernetes.default.svc
+    - namespace: apps
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

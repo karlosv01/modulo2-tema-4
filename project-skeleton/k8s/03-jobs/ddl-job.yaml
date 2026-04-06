@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ddl-job
+  namespace: database
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: ddl-job
+          # Ejercicio 4:
+          # Este Job espera a PostgreSQL y ejecuta el DDL montado desde ConfigMap.
+          image: postgres:16-alpine
+          env:
+            - name: PGPASSWORD
+              value: trainingpwd
+          command:
+            - sh
+            - -c
+            - |
+              until pg_isready -h postgres -U training -d trainingdb; do sleep 2; done
+              psql -h postgres -U training -d trainingdb -f /ddl/init.sql
+          volumeMounts:
+            - name: ddl-volume
+              mountPath: /ddl
+      volumes:
+        - name: ddl-volume
+          configMap:
+            name: ddl-sql

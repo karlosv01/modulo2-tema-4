@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backend-java
+  namespace: argocd
+spec:
+  project: training-project
+  source:
+    repoURL: https://github.com/karlosv01/modulo2-tema-4.git
+    targetRevision: HEAD
+    # TODO ejercicio 3:
+    # Ajustar al path exacto del componente Java.
+    path: project-skeleton/k8s/04-apps
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: apps
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

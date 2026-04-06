@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # Ejercicio 4:
+  # Este ConfigMap almacenara el contenido del DDL.
+  name: ddl-sql
+  namespace: database
+data:
+  # TODO ejercicio 4:
+  # Copiar aqui el contenido del DDL trabajado en la practica 2.
+  init.sql: |
+    -- Completa este bloque con el modelo de datos.
+    -- Pista:
+    -- - tabla de control healthcheck
+    -- - tabla favorite_colors para el backend Python

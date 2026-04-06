@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: backend-java
+  namespace: {{ .Values.namespace }}
+spec:
+  serviceName: backend-java-headless
+  replicas: {{ .Values.backendJava.replicaCount }}
+  selector:
+    matchLabels:
+      app: backend-java
+  template:
+    metadata:
+      labels:
+        app: backend-java
+    spec:
+      containers:
+        - name: backend-java
+          image: {{ .Values.backendJava.image }}
+          ports:
+            - containerPort: {{ .Values.backendJava.containerPort }}

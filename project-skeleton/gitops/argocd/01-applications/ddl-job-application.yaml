@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ddl-job
+  namespace: argocd
+spec:
+  project: training-project
+  source:
+    repoURL: https://github.com/karlosv01/modulo2-tema-4.git
+    targetRevision: HEAD
+    # TODO ejercicio 3:
+    # Revisar si quieres separar ConfigMap y Job o tratarlos juntos.
+    path: project-skeleton/k8s/03-jobs
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: database
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webui
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webui
+  template:
+    metadata:
+      labels:
+        app: webui
+    spec:
+      containers:
+        - name: webui
+          # Ejercicio 5:
+          # Sustituir por la imagen construida para la webui.
+          image: REPLACE_ME_WEBUI_IMAGE
+          ports:
+            - containerPort: 80
+          # TODO ejercicio 5:
+          # Revisar imagePullPolicy si la imagen se importa o se obtiene desde registry.
+          # imagePullPolicy: IfNotPresent

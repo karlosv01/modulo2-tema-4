@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres-helm
+  namespace: argocd
+spec:
+  project: training-project
+  source:
+    # Ejercicio 5:
+    # Ejemplo de despliegue GitOps usando un chart Helm oficial.
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: postgresql
+    targetRevision: 15.5.23
+    helm:
+      releaseName: training-postgresql
+      values: |
+        auth:
+          username: training
+          password: trainingpwd
+          database: trainingdb
+        primary:
+          persistence:
+            enabled: true
+            size: 1Gi
+            storageClass: local-path
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: database
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

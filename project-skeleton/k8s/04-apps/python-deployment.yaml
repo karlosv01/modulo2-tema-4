@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-python
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-python
+  template:
+    metadata:
+      labels:
+        app: backend-python
+    spec:
+      containers:
+        - name: backend-python
+          # Ejercicio 5:
+          # Deployment es el modelo adecuado para este backend stateless,
+          # aunque consuma una base de datos externa.
+          image: REPLACE_ME_BACKEND_PYTHON_IMAGE
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB_HOST
+              value: postgres.database.svc.cluster.local
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: trainingdb
+            - name: DB_USER
+              value: training
+            - name: DB_PASSWORD
+              value: trainingpwd
+          # TODO ejercicio 5:
+          # Revisar imagePullPolicy si trabajas con imagen importada o registry local.
+          # imagePullPolicy: IfNotPresent

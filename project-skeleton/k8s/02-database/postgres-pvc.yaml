@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # Ejercicio 1 y 3:
+  # k3d + k3s usaran el storage class local-path por defecto.
+  name: postgres-data
+  namespace: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  # TODO ejercicio 3:
+  # Verificar el nombre del StorageClass disponible en el cluster.
+  storageClassName: local-path

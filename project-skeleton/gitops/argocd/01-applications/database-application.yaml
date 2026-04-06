@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: database
+  namespace: argocd
+spec:
+  project: training-project
+  source:
+    repoURL: https://github.com/karlosv01/modulo2-tema-4.git
+    targetRevision: HEAD
+    # TODO ejercicio 3:
+    # Ajustar al path real donde se guardan los manifiestos de PostgreSQL.
+    path: project-skeleton/k8s/02-database
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: database
+  syncPolicy:
+    # TODO ejercicio 3:
+    # Empezar en manual y valorar despues si activar auto-sync.
+    syncOptions:
+      - CreateNamespace=true

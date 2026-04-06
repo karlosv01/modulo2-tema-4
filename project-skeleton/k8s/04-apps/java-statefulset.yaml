@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  # Ejercicio 5:
+  # Se usa StatefulSet con fin didactico para comparar con Deployment.
+  # Nota tecnica: una API stateless como esta, en un caso real, suele modelarse como Deployment.
+  name: backend-java
+  namespace: apps
+spec:
+  serviceName: backend-java-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-java
+  template:
+    metadata:
+      labels:
+        app: backend-java
+    spec:
+      containers:
+        - name: backend-java
+          # TODO ejercicio 5:
+          # Sustituir por la imagen construida para la app Java.
+          image: REPLACE_ME_BACKEND_JAVA_IMAGE
+          ports:
+            - containerPort: 8080
+          # TODO ejercicio 5:
+          # Si usas un registry local o import de imagen en k3s, revisar imagePullPolicy.
+          # imagePullPolicy: IfNotPresent

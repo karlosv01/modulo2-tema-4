@@ -1,0 +1,28 @@
+# Ejercicio 5 opcional:
+# Ajustar imagenes, puertos y configuracion del backend Python.
+
+namespace: apps
+
+webui:
+  image: REPLACE_ME_WEBUI_IMAGE
+  replicaCount: 1
+  servicePort: 80
+  containerPort: 80
+
+backendJava:
+  image: REPLACE_ME_BACKEND_JAVA_IMAGE
+  replicaCount: 1
+  servicePort: 8080
+  containerPort: 8080
+
+backendPython:
+  image: REPLACE_ME_BACKEND_PYTHON_IMAGE
+  replicaCount: 1
+  servicePort: 5000
+  containerPort: 5000
+  env:
+    DB_HOST: postgres.database.svc.cluster.local
+    DB_PORT: "5432"
+    DB_NAME: trainingdb
+    DB_USER: training
+    DB_PASSWORD: trainingpwd
