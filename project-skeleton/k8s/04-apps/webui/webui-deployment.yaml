@@ -17,7 +17,7 @@ spec:
         - name: webui
           # Ejercicio 5:
           # Sustituir por la imagen construida para la webui.
-          image: REPLACE_ME_WEBUI_IMAGE
+          image: training-webui:0.1
           ports:
             - containerPort: 80
           # TODO ejercicio 5:

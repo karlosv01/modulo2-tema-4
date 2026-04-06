@@ -21,7 +21,7 @@ spec:
         - name: backend-java
           # TODO ejercicio 5:
           # Sustituir por la imagen construida para la app Java.
-          image: REPLACE_ME_BACKEND_JAVA_IMAGE
+          image: training-java-api:0.1
           ports:
             - containerPort: 8080
           # TODO ejercicio 5:

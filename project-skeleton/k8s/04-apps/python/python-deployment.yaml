@@ -18,7 +18,7 @@ spec:
           # Ejercicio 5:
           # Deployment es el modelo adecuado para este backend stateless,
           # aunque consuma una base de datos externa.
-          image: REPLACE_ME_BACKEND_PYTHON_IMAGE
+          image: training-python-api:0.1
           ports:
             - containerPort: 5000
           env:
