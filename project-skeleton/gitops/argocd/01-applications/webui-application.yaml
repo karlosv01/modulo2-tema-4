@@ -10,7 +10,7 @@ spec:
     targetRevision: HEAD
     # TODO ejercicio 3:
     # Ajustar al path exacto del componente webui.
-    path: project-skeleton/k8s/04-apps
+    path: project-skeleton/k8s/04-apps/webui
   destination:
     server: https://kubernetes.default.svc
     namespace: apps
